@@ -5,47 +5,46 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.HashMap;
+
 
 public class LoginPage {
-    private WebDriver driver;
+    protected WebDriver driver;
 
     //Existed user login
     @FindBy(id = "j_username")
-    private WebElement userName;
+    protected WebElement userName;
 
     @FindBy (id = "j_password")
-    private WebElement password;
+    protected WebElement password;
 
     @FindBy(id = "loginFormBtn")
-    private WebElement loginButton;
+    protected WebElement loginButton;
 
     @FindBy(className= "forgotten-password")
-    private WebElement forgotPassword;
+    protected WebElement forgotPassword;
 
     //Register new user
     @FindBy(id = "register.firstName")
-    private WebElement registerFirstName;
+    protected WebElement registerFirstName;
 
     @FindBy(id = "register.lastName")
-    private WebElement registerLastName;
+    protected WebElement registerLastName;
 
     @FindBy(id = "register.email")
-    private WebElement registerEmail;
+    protected WebElement registerEmail;
 
     @FindBy (id = "password")
-    private WebElement registerPassword;
+    protected WebElement registerPassword;
 
     @FindBy(id="register.checkPwd")
-    private  WebElement confirmPassword;
+    protected  WebElement confirmPassword;
 
     @FindBy (id="registerFormBtn")
-    private WebElement confirmRegistrationButton;
+    protected WebElement confirmRegistrationButton;
 
-    @FindBy (linkText = "Your username or password was incorrect.")
-    private WebElement errorLogin;
-
-    @FindBy (linkText = "Please correct the errors below.")
-    private WebElement errorRegistration;
+    @FindBy (xpath = "/html/body/main/div[2]/div[1]/div/p")
+    protected WebElement errorMessage;
 
     public LoginPage (WebDriver driver) {
         this.driver=driver;
@@ -61,13 +60,12 @@ public class LoginPage {
         password.sendKeys(inputPassword);
     }
 
-    public void inputRegisterUserData (String inputFName, String inputLName, String inputPass, String inputConPass,
-                                       String inputEmail) {
-        registerFirstName.sendKeys(inputFName);
-        registerLastName.sendKeys(inputLName);
-        registerEmail.sendKeys(inputEmail);
-        registerPassword.sendKeys(inputPass);
-        confirmPassword.sendKeys(inputConPass);
+    public void inputRegisterUserData (HashMap <String, String> dataUser) {
+        registerFirstName.sendKeys(dataUser.get("First Name"));
+        registerLastName.sendKeys(dataUser.get("Last Name"));
+        registerEmail.sendKeys(dataUser.get("Email"));
+        registerPassword.sendKeys(dataUser.get("Password"));
+        confirmPassword.sendKeys(dataUser.get("Password"));
     }
 
     public void clickSubmitRegister () {
@@ -75,12 +73,11 @@ public class LoginPage {
     }
 
     public boolean errorLoginDisplay () {
-        return errorLogin.getText().toString().contains("Your username or password was incorrect.");
+        return errorMessage.getText().contains("Your username or password was incorrect.");
     }
 
     public boolean errorRegistrationDisplay () {
-        return errorLogin.getText().toString().contains("Please correct the errors below.");
+        return errorMessage.getText().contains("Please correct the errors below.");
     }
-
 
 }
