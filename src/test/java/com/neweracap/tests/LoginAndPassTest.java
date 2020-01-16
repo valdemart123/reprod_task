@@ -5,17 +5,21 @@ import com.neweracap.pages.HomePage;
 import com.neweracap.pages.LoginPage;
 import com.neweracap.pages.UserHomePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+
+@Epic("Login Tests Epic")
+@Feature("Invalid Login Features")
 public class LoginAndPassTest {
 
     private WebDriver driver;
 
     @BeforeEach
     public void setupDriver () {
-        WebDriverManager.chromiumdriver().setup();
+        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
@@ -27,17 +31,22 @@ public class LoginAndPassTest {
         }
     }
 
+
     @Test
+    @Story("User tries to login the system without data.")
+    @Description("Empty data for login")
     public  void loginWithEmptyEmailAndPassword () {
         HomePage home = new HomePage(driver);
         home.clickOnRegisterButton();
         LoginPage loginPage = new LoginPage(driver);
         loginPage.clickOnLoginBtn();
-        Assertions.assertTrue(loginPage.errorLoginDisplay());
     }
 
+
     @Test
-    public void registerWithEmptyDatas () {
+    @Story("User tries to register without data.")
+    @Description("Test registration with empty data")
+    public void registerWithEmptyData () {
         HomePage home = new HomePage(driver);
         home.clickOnRegisterButton();
         LoginPage loginPage = new LoginPage(driver);
@@ -46,6 +55,8 @@ public class LoginAndPassTest {
     }
 
     @Test
+    @Story("User tries to register with data.")
+    @Description("Test registration with valid data")
     public void registerWithValideData () {
         DataGenerator data = new DataGenerator();
         HomePage home = new HomePage(driver);
