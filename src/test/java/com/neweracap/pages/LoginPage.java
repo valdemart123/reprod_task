@@ -8,59 +8,47 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.HashMap;
 
 
-public class LoginPage {
-    protected WebDriver driver;
+public class LoginPage extends BasePage {
 
     //Existed user login
     @FindBy(id = "j_username")
-    protected WebElement userName;
-
-    @FindBy (id = "j_password")
-    protected WebElement password;
-
+    private WebElement userName;
+    @FindBy(id = "j_password")
+    private WebElement password;
     @FindBy(id = "loginFormBtn")
-    protected WebElement loginButton;
-
-    @FindBy(className= "forgotten-password")
-    protected WebElement forgotPassword;
-
+    private WebElement loginButton;
+    @FindBy(className = "forgotten-password")
+    private WebElement forgotPassword;
     //Register new user
     @FindBy(id = "register.firstName")
-    protected WebElement registerFirstName;
-
+    private WebElement registerFirstName;
     @FindBy(id = "register.lastName")
-    protected WebElement registerLastName;
-
+    private WebElement registerLastName;
     @FindBy(id = "register.email")
-    protected WebElement registerEmail;
+    private WebElement registerEmail;
+    @FindBy(id = "password")
+    private WebElement registerPassword;
+    @FindBy(id = "register.checkPwd")
+    private WebElement confirmPassword;
+    @FindBy(id = "registerFormBtn")
+    private WebElement confirmRegistrationButton;
+    @FindBy(xpath = "/html/body/main/div[2]/div[1]/div/p")
+    private WebElement errorMessage;
 
-    @FindBy (id = "password")
-    protected WebElement registerPassword;
-
-    @FindBy(id="register.checkPwd")
-    protected  WebElement confirmPassword;
-
-    @FindBy (id="registerFormBtn")
-    protected WebElement confirmRegistrationButton;
-
-    @FindBy (xpath = "/html/body/main/div[2]/div[1]/div/p")
-    protected WebElement errorMessage;
-
-    public LoginPage (WebDriver driver) {
-        this.driver=driver;
-        PageFactory.initElements(driver, this);
+    public LoginPage(WebDriver driver) {
+        super(driver);
     }
 
-    public void clickOnLoginBtn () {
+    public void clickOnLoginBtn() {
         loginButton.click();
     }
 
-    public void inputDataUserLogin (String email, String inputPassword) {
+    public void inputDataUserLogin(String email, String inputPassword) {
         userName.sendKeys(email);
         password.sendKeys(inputPassword);
     }
 
-    public void inputRegisterUserData (HashMap <String, String> dataUser) {
+    public void inputRegisterUserData(HashMap<String, String> dataUser) {
         registerFirstName.sendKeys(dataUser.get("First Name"));
         registerLastName.sendKeys(dataUser.get("Last Name"));
         registerEmail.sendKeys(dataUser.get("Email"));
@@ -68,15 +56,15 @@ public class LoginPage {
         confirmPassword.sendKeys(dataUser.get("Password"));
     }
 
-    public void clickSubmitRegister () {
+    public void clickSubmitRegister() {
         confirmRegistrationButton.click();
     }
 
-    public boolean errorLoginDisplay () {
+    public boolean errorLoginDisplay() {
         return errorMessage.getText().contains("Your username or password was incorrect.");
     }
 
-    public boolean errorRegistrationDisplay () {
+    public boolean errorRegistrationDisplay() {
         return errorMessage.getText().contains("Please correct the errors below.");
     }
 
