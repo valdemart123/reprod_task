@@ -1,35 +1,40 @@
 package com.neweracap.tests;
 
-import com.neweracap.data_generators.DataGenerator;
-import com.neweracap.pages.HomePage;
 import com.neweracap.pages.LoginPage;
-import com.neweracap.pages.UserHomePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.qameta.allure.*;
-import org.junit.jupiter.api.*;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.concurrent.TimeUnit;
 
 @Epic("Login Tests Epic")
 @Feature("Invalid Login Features")
 public class LoginAndPassTest {
 
     private WebDriver driver;
+    private LoginPage loginPage;
 
     @BeforeEach
     public void setupDriver() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        loginPage = new LoginPage(driver);
     }
 
     @Test
     @Story("User tries to login the system without data.")
     @Description("Empty data for login")
     public void loginWithEmptyEmailAndPassword() {
-        HomePage home = new HomePage(driver);
-        home.clickOnRegisterButton();
-        LoginPage loginPage = new LoginPage(driver);
+        loginPage.clickOnRegisterButton();
         loginPage.clickOnLoginBtn();
     }
 
@@ -37,25 +42,19 @@ public class LoginAndPassTest {
     @Story("User tries to register without data.")
     @Description("Test registration with empty data")
     public void registerWithEmptyData() {
-        HomePage home = new HomePage(driver);
-        home.clickOnRegisterButton();
-        LoginPage loginPage = new LoginPage(driver);
+        loginPage.clickOnRegisterButton();
         loginPage.clickSubmitRegister();
-        Assertions.assertTrue(loginPage.errorRegistrationDisplay());
+        loginPage.errorRegistrationDisplay();
     }
 
     @Test
     @Story("User tries to register with data.")
     @Description("Test registration with valid data")
-    public void registerWithValideData() {
-        DataGenerator data = new DataGenerator();
-        HomePage home = new HomePage(driver);
-        home.clickOnRegisterButton();
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.inputRegisterUserData(data.getUserData());
+    public void registerWithValidData() {
+        loginPage.clickOnRegisterButton();
+        loginPage.inputRegisterUserData();
         loginPage.clickSubmitRegister();
-        UserHomePage userHome = new UserHomePage(driver);
-        Assertions.assertTrue(userHome.messageRegistrationResult());
+        loginPage.completeRegistrationDisplay();
     }
 
 

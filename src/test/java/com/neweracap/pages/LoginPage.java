@@ -1,12 +1,10 @@
 package com.neweracap.pages;
 
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-
-import java.util.HashMap;
-
 
 public class LoginPage extends BasePage {
 
@@ -32,12 +30,15 @@ public class LoginPage extends BasePage {
     private WebElement confirmPassword;
     @FindBy(id = "registerFormBtn")
     private WebElement confirmRegistrationButton;
-    @FindBy(xpath = "/html/body/main/div[2]/div[1]/div/p")
-    private WebElement errorMessage;
+    @FindBy(xpath = "//p[@class='alert-plain-message']")
+    protected WebElement errorMessage;
+    @FindBy(css = "myAccountLinksHeader")
+    private WebElement account;
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
+
 
     public void clickOnLoginBtn() {
         loginButton.click();
@@ -48,24 +49,29 @@ public class LoginPage extends BasePage {
         password.sendKeys(inputPassword);
     }
 
-    public void inputRegisterUserData(HashMap<String, String> dataUser) {
-        registerFirstName.sendKeys(dataUser.get("First Name"));
-        registerLastName.sendKeys(dataUser.get("Last Name"));
-        registerEmail.sendKeys(dataUser.get("Email"));
-        registerPassword.sendKeys(dataUser.get("Password"));
-        confirmPassword.sendKeys(dataUser.get("Password"));
+    public void inputRegisterUserData() {
+        Faker faker = new Faker();
+        registerFirstName.sendKeys(faker.firstName());
+        registerLastName.sendKeys(faker.lastName());
+        registerEmail.sendKeys(faker.bothify("????##@yopmail.com"));
+        registerPassword.sendKeys("P@ssword123##");
+        confirmPassword.sendKeys("P@ssword123##");
     }
 
     public void clickSubmitRegister() {
         confirmRegistrationButton.click();
     }
 
-    public boolean errorLoginDisplay() {
-        return errorMessage.getText().contains("Your username or password was incorrect.");
-    }
+    /*
+    For next using in different tests.
+    public void errorLoginDisplay() {
+        Assertions.assertEquals("Your username or password was incorrect.", errorMessage.getText());
+    }*/
 
-    public boolean errorRegistrationDisplay() {
-        return errorMessage.getText().contains("Please correct the errors below.");
+    public void errorRegistrationDisplay() {
+        Assertions.assertEquals("Please correct the errors below.", errorMessage.getText());
     }
-
+    public void completeRegistrationDisplay() {
+        Assertions.assertEquals("You have successfully created your account!", errorMessage.getText());
+    }
 }
